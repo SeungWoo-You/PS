@@ -36,8 +36,7 @@ int main() {
 	array<int, 6> Dh = {1, -1, 0, 0, 0, 0}, Dn = {0, 0, 1, -1, 0, 0}, Dm = {0, 0, 0, 0, 1, -1};
 
 	while (!Q.empty()) {
-		array<int, 3> pos = Q.front();
-		Q.pop();
+		array<int, 3>& pos = Q.front();
 		int i = pos[0], j = pos[1], k = pos[2];
 
 		for (int d = 0; d < 6; d++) {
@@ -51,6 +50,8 @@ int main() {
 					Q.push({h, n, m});
 				}
 		}
+
+		Q.pop();
 	}
 
 	int result = 0;
