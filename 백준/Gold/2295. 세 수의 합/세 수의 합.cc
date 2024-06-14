@@ -28,19 +28,7 @@ int main() {
 
 	for (int i = 0; i < N; i++) {
 		for (int j = i; j < N; j++) {
-			int target = V[j] - V[i];
-			int start = 0, end = two_sums.size() - 1;
-			
-			while (start <= end) {
-				int mid = (start + end) / 2;
-
-				if (two_sums[mid] > target) end = mid - 1;
-				else if (two_sums[mid] < target) start = mid + 1;
-				else {
-					k = max(k, V[j]);
-					break;
-				}
-			}
+			if (binary_search(two_sums.begin(), two_sums.end(), V[j] - V[i])) k = max(k, V[j]);
 		}
 	}
 
