@@ -56,7 +56,6 @@ public:
 			G[v].push_back(u);
 		}
 
-		table[root][0] = root;
 		depths[root] = 1;
 
 		build();
