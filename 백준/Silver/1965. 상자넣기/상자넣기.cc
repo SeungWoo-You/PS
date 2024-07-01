@@ -13,11 +13,10 @@ int main() {
 	vector<int> boxes(N + 1), lasts;
 	for (int i = 1; i <= N; i++) cin >> boxes[i];
 
-	lasts.push_back(0);
 	lasts.push_back(boxes[1]);
 
 	for (int i = 2; i <= N; i++) {
-		int start = 1, end = lasts.size() - 1;
+		int start = 0, end = (int) lasts.size() - 1;
 
 		while (start <= end) {
 			int mid = (start + end) / 2;
@@ -29,7 +28,7 @@ int main() {
 		else lasts[start] = boxes[i];
 	}
 	
-	cout << lasts.size() - 1;
+	cout << lasts.size();
 
 	return 0;
 }
