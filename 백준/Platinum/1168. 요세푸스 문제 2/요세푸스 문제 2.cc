@@ -8,18 +8,15 @@ private:
 	int N, K;
 	vector<int> cnts;
 
-	void build(int node, int s, int e, int i) {
+	void build(int node, int s, int e) {
 		if (s == e) {
 			cnts[node] = 1;
 			return;
 		}
 
 		int mid = (s + e) / 2;
-		if (i <= mid)
-			build(node << 1, s, mid, i);
-		else
-			build(node << 1 | 1, mid + 1, e, i);
-
+		build(node << 1, s, mid);
+		build(node << 1 | 1, mid + 1, e);
 		cnts[node] = cnts[node << 1] + cnts[node << 1 | 1];
 	}
 
@@ -28,8 +25,7 @@ public:
 		this->N = N, this->K = K;
 		cnts = vector<int>(4 * (N + 1), 0);
 
-		for (int i = 1; i <= N; i++)
-			build(1, 1, N, i);
+		build(1, 1, N);
 	}
 
 	int find(int node, int l, int r, int k) {
