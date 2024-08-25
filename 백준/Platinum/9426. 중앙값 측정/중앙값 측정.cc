@@ -8,14 +8,9 @@ typedef long long LLT;
 class SegTree {
 private:
 	int M = 65536;
-	vector<int> T;
+	vector<int> T = vector<int>(2 * M, 0);
 
 public:
-	SegTree() {
-		
-		T.resize(2 * M, 0);
-	}
-
 	void update(int p, int delta) {
 		for (T[p += M] += delta; p > 1; p >>= 1)
 			T[p >> 1] = T[p] + T[p ^ 1];
