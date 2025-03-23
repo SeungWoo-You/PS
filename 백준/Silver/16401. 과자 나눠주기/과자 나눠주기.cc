@@ -3,27 +3,33 @@
 
 #define MAX_LEN 1'000'000'000
 #define MAX_ANS ~0U >> 1
+#define MAX_N 1'000'000
 
-static int* snacks;
+static int snacks[MAX_N] = {0};
 static int M, N;
 
 int main() {
+	int left = 1, right = -1;
+	int ans = MAX_ANS;
+
 	scanf("%d %d", &M, &N);
 
-	snacks = new int[N];
-
-	for (register int i = 0; i < N; i++)
+	for (register int i = 0; i < N; i++) {
 		scanf("%d", &snacks[i]);
 
-	int left = 1, right = MAX_LEN;
-	int ans = MAX_ANS;
+		if (snacks[i] > right)
+			right = snacks[i];
+	}
 
 	while (left <= right) {
 		int mid = (left + right) >> 1;
 		int div = 0;
 
-		for (register int n = 0; n < N; n++)
+		for (register int n = 0; n < N; n++) {
 			div += snacks[n] / mid;
+			
+			if (div >= M) break;
+		}
 
 		if (div >= M) {
 			ans = mid;
