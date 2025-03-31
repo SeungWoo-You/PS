@@ -21,10 +21,8 @@ public:
 	void copy_name(const char name[]) {
 		int i = 0;
 
-		while (i < MAX_NAME - 1 && name[i] != '\0') {
-			this->name[i] = name[i];
-			i++;
-		}
+		while (name[i] != '\0')
+			this->name[i++] = name[i];
 
 		this->name[i] = '\0';
 	}
