@@ -1,7 +1,8 @@
-#include <iostream>
-#include <string>
+#define _CRT_SECURE_NO_WARNINGS
 
-using namespace std;
+#include <stdio.h>
+
+#define MAX_NAME 16
 
 int make_key(int day, int month, int year) {
 	return year * 10000 + month * 100 + day;
@@ -9,16 +10,23 @@ int make_key(int day, int month, int year) {
 
 class Student {
 public:
-	string name;
+	char name[MAX_NAME];
 	int birthday;
 
-	Student(string name, int day, int month, int year) {
+	Student(const char name[], int day, int month, int year) {
 		copy_name(name);
 		birthday = make_key(day, month, year);
 	}
 
-	void copy_name(string name) {
-		this->name = name;
+	void copy_name(const char name[]) {
+		int i = 0;
+
+		while (i < MAX_NAME - 1 && name[i] != '\0') {
+			this->name[i] = name[i];
+			i++;
+		}
+
+		this->name[i] = '\0';
 	}
 };
 
@@ -26,13 +34,13 @@ int main() {
 	int N;
 	Student min_std = {"", 00, 00, 0000}, max_std = {"", 99, 99, 9999};
 
-	cin >> N;
+	scanf("%d", &N);
 
 	while (N--) {
-		string name;
+		char name[MAX_NAME];
 		int day, month, year;
 
-		cin >> name >> day >> month >> year;
+		scanf("%s %d %d %d", name, &day, &month, &year);
 
 		int key = make_key(day, month, year);
 
@@ -42,7 +50,7 @@ int main() {
 			max_std = Student {name, day, month, year};
 	}
 
-	cout << min_std.name << '\n' << max_std.name;
+	printf("%s\n%s", min_std.name, max_std.name);
 
 	return 0;
 }
