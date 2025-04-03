@@ -1,6 +1,6 @@
-#include <iostream>
+#define _CRT_SECURE_NO_WARNINGS
 
-using namespace std;
+#include <stdio.h>
 
 #define MAX_N 51
 
@@ -8,8 +8,7 @@ int main() {
 	int N;
 	char seats[MAX_N];
 
-	cin >> N;
-	cin >> seats;
+	scanf("%d %s", &N, seats);
 
 	int cup_num = N + 1;
 
