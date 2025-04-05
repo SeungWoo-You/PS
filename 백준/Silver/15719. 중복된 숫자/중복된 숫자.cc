@@ -1,23 +1,25 @@
-#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#define FASTIO ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 
-#include <stdio.h>
+using namespace std;
 
-#define NATURAL_SUM(N) (((long long) N) * (N + 1) / 2)
+#define NATURAL_SUM(N) ((N) * (N + 1) / 2)
 
 int main() {
-	int N;
-	long long sum = 0;
+	FASTIO;
 
-	scanf("%d", &N);
+	long long N, sum = 0;
+
+	cin >> N;
 
 	for (int i = 0; i < N; i++) {
 		int num;
 
-		scanf("%d", &num);
+		cin >> num;
 		sum += num;
 	}
 
-	printf("%lld", sum - NATURAL_SUM(N - 1));
+	cout << sum - NATURAL_SUM(N - 1);
 
 	return 0;
 }
