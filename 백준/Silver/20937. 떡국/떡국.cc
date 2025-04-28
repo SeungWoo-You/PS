@@ -17,10 +17,7 @@ int main() {
 		int x;
 		cin >> x;
 
-		counts[x]++;
-
-		if (counts[x] > answer)
-			answer = counts[x];
+		answer = answer > ++counts[x] ? answer : counts[x];
 	}
 
 	cout << answer;
