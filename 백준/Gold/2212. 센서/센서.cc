@@ -7,7 +7,6 @@ using namespace std;
 int negs[MAX_N] = {0};
 int poss[MAX_N] = {0};
 int temps[MAX_N];
-int gaps[MAX_N - 1] = {0};
 
 void counting_sort(int arr[], int size, int place) {
 	int counts[10] = {0};
@@ -40,6 +39,85 @@ void radix_sort(int arr[], int size) {
 		counting_sort(arr, size, place);
 }
 
+class Heap {
+	int arr[1001] = {0};
+	int total = 0;
+	int hsize = 0;
+
+	void swap(int* x, int* y) {
+		int temp = *x;
+		*x = *y;
+		*y = temp;
+	}
+
+	int parent(int i) {
+		return i >> 1;
+	}
+
+	int left_child(int i) {
+		return i << 1;
+	}
+
+	int right_child(int i) {
+		return i << 1 | 1;
+	}
+
+	void heapify(int idx) {
+		int s = idx;
+		int left = left_child(idx);
+		int right = right_child(idx);
+
+		if (left <= hsize && arr[left] < arr[s]) s = left;
+		if (right <= hsize && arr[right] < arr[s]) s = right;
+
+		if (s != idx) {
+			swap(&arr[s], &arr[idx]);
+			heapify(s);
+		}
+	}
+
+public:
+	void push(int K, int val) {
+		arr[++hsize] = val;
+		total += val;
+
+		int idx = hsize;
+
+		while (idx > 1 && arr[parent(idx)] > arr[idx]) {
+			swap(&arr[parent(idx)], &arr[idx]);
+			idx = parent(idx);
+		}
+
+		if (hsize > K - 1)
+			pop();
+	}
+
+	int pop() {
+		if (hsize == 1) {
+			total -= arr[1];
+
+			return arr[hsize--];
+		}
+
+		int res = arr[1];
+		total -= res;
+		arr[1] = arr[hsize--];
+		heapify(1);
+
+		return res;
+	}
+
+	int size() {
+		return hsize;
+	}
+
+	int get_sum() {
+		return total;
+	}
+};
+
+Heap heap = Heap {};
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
@@ -66,25 +144,28 @@ int main() {
 	radix_sort(poss, pos_N);
 	radix_sort(negs, neg_N);
 
-	int gsize = 0;
-
-	for (int i = 0; i < neg_N - 1; i++)
-		gaps[gsize++] = negs[i + 1] - negs[i];
-
-	if (pos_N > 0 && neg_N > 0)
-		gaps[gsize++] = poss[0] + negs[0];
-
-	for (int i = 0; i < pos_N - 1; i++)
-		gaps[gsize++] = poss[i + 1] - poss[i];
-		
-	radix_sort(gaps, gsize);
-
 	int total = 0;
+	int diff;
 
-	for (int i = 0; i <= N - 1 - K; i++)
-		total += gaps[i];
+	for (int i = 0; i < neg_N - 1; i++) {
+		diff = negs[i + 1] - negs[i];
+		total += diff;
+		heap.push(K, diff);
+	}
 
-	cout << total;
+	if (pos_N > 0 && neg_N > 0) {
+		diff = poss[0] + negs[0];
+		total += diff;
+		heap.push(K, diff);
+	}
+
+	for (int i = 0; i < pos_N - 1; i++) {
+		diff = poss[i + 1] - poss[i];
+		total += diff;
+		heap.push(K, diff);
+	}
+
+	cout << total - heap.get_sum();
 
 	return 0;
 }
