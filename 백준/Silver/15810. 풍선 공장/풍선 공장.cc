@@ -22,8 +22,10 @@ int main() {
 		long long count = 0;
 		long long mid = (left + right) >> 1;
 
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < N; i++) {
 			count += mid / times[i];
+			if (count >= M) break;
+		}
 
 		if (count >= M) right = mid - 1, res = mid;
 		else left = mid + 1;
