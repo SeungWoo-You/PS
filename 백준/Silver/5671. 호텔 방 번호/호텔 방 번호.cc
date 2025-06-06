@@ -1,10 +1,26 @@
 #include <iostream>
 
+#define MAX_M 5001
+
 using namespace std;
+
+int counts[MAX_M] = {0};
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
+
+	for (int i = 1; i < MAX_M; i++) {
+		bool checked[10] = {false};
+		int num = i;
+		
+		while (num) {
+			if (checked[num % 10]) break;
+			checked[num % 10] = true;
+			num /= 10;
+		}
+		counts[i] = counts[i - 1] + (num > 0 ? 0 : 1);
+	}
 
 	while (true) {
 		int N, M;
@@ -12,27 +28,7 @@ int main() {
 		
 		if (cin.eof()) break;
 
-		int count = 0;
-
-		for (int n = N; n <= M; n++) {
-			bool checked[10] = {false};
-			bool passed = true;
-
-			for (int exp = 1; n / exp > 0; exp *= 10) {
-				int idx = (n / exp) % 10;
-
-				if (checked[idx]) {
-					passed = false;
-					break;
-				}
-
-				checked[idx] = true;
-			}
-
-			if (passed) count++;
-		}
-
-		cout << count << '\n';
+		cout << counts[M] - counts[N - 1] << '\n';
 	}
 
 	return 0;
