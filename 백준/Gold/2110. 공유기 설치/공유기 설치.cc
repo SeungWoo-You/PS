@@ -5,29 +5,46 @@
 
 using namespace std;
 
-int houses[MAX_N], temps[MAX_N];
+int houses[MAX_N];
 
-void merge(int left, int mid, int right) {
-	int i = left, j = mid + 1, k = left;
-
-	while (i <= mid && j <= right) {
-		if (houses[i] <= houses[j]) temps[k++] = houses[i++];
-		else temps[k++] = houses[j++];
-	}
-
-	while (i <= mid) temps[k++] = houses[i++];
-	while (j <= right) temps[k++] = houses[j++];
-
-	for (int t = left; t <= right; t++)
-		houses[t] = temps[t];
+void swap(int* x, int* y) {
+	int temp = *x;
+	*x = *y;
+	*y = temp;
 }
 
-void merge_sort(int left, int right) {
+int get_pivot_idx(int left, int right) {
+	int mid = (left + right) >> 1;
+	int a = houses[left];
+	int b = houses[mid];
+	int c = houses[right];
+
+	if ((a > b && a < c) || (a < b && a > c))
+		swap(&houses[left], &houses[left]);
+	else if ((b > a && b < c) || (b < a && b > c))
+		swap(&houses[left], &houses[mid]);
+	else
+		swap(&houses[left], &houses[right]);
+
+	int pivot = houses[left];
+	int k = left;
+
+	for (int i = left + 1; i <= right; i++)
+		if (houses[i] < pivot) {
+			k++;
+			swap(&houses[k], &houses[i]);
+		}
+
+	swap(&houses[left], &houses[k]);
+
+	return k;
+}
+
+void quick_sort(int left, int right) {
 	if (left < right) {
-		int mid = (left + right) >> 1;
-		merge_sort(left, mid);
-		merge_sort(mid + 1, right);
-		merge(left, mid, right);
+		int pid = get_pivot_idx(left, right);
+		quick_sort(left, pid - 1);
+		quick_sort(pid + 1, right);
 	}
 }
 
@@ -61,7 +78,7 @@ int main() {
 	for (int i = 0; i < N; i++)
 		cin >> houses[i];
 
-	merge_sort(0, N - 1);
+	quick_sort(0, N - 1);
 
 	cout << place_wifis(N, C);
 
