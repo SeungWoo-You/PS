@@ -7,34 +7,28 @@ using namespace std;
 
 int houses[MAX_N], temps[MAX_N];
 
-void counting_sort(int N, int exp) {
-	int counts[10] = {0};
-	
-	for (int i = 0; i < N; i++) {
-		int idx = (houses[i] / exp) % 10;
-		counts[idx]++;
+void merge(int left, int mid, int right) {
+	int i = left, j = mid + 1, k = left;
+
+	while (i <= mid && j <= right) {
+		if (houses[i] <= houses[j]) temps[k++] = houses[i++];
+		else temps[k++] = houses[j++];
 	}
 
-	for (int i = 1; i < 10; i++)
-		counts[i] += counts[i - 1];
+	while (i <= mid) temps[k++] = houses[i++];
+	while (j <= right) temps[k++] = houses[j++];
 
-	for (int i = N - 1; i >= 0; i--) {
-		int idx = (houses[i] / exp) % 10;
-		temps[--counts[idx]] = houses[i];
-	}
-
-	for (int i = 0; i < N; i++)
-		houses[i] = temps[i];
+	for (int t = left; t <= right; t++)
+		houses[t] = temps[t];
 }
 
-void radix_sort(int N) {
-	int max_elem = 0;
-
-	for (int i = 0; i < N; i++)
-		if (max_elem < houses[i]) max_elem = houses[i];
-
-	for (int exp = 1; max_elem / exp > 0; exp *= 10)
-		counting_sort(N, exp);
+void merge_sort(int left, int right) {
+	if (left < right) {
+		int mid = (left + right) >> 1;
+		merge_sort(left, mid);
+		merge_sort(mid + 1, right);
+		merge(left, mid, right);
+	}
 }
 
 int place_wifis(int N, int C) {
@@ -67,7 +61,7 @@ int main() {
 	for (int i = 0; i < N; i++)
 		cin >> houses[i];
 
-	radix_sort(N);
+	merge_sort(0, N - 1);
 
 	cout << place_wifis(N, C);
 
